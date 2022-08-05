@@ -1,0 +1,6 @@
+- go to https://nodejs.org/en/ and download node.js
+- node v10.8 for the instructor
+- npm v6.2.0 for the instructor
+
+- node v18.7.0 for ours
+- npm v8.15.0 for ours

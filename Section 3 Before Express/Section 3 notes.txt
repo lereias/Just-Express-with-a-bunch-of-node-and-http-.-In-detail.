@@ -1,0 +1,155 @@
+Express is closely connected to many frameworks such as
+React, Angular
+
+Express is connected to Node.JS
+
+Express is connected to mongoDB and MySQL
+
+Express is also connected to socket.io
+
+Pre-Express
+1. HTTP (HyperText Transfer Protocol)
+   ~ heart of all web server
+   ~ TCP / UDP
+     o networking protocol
+2. NodeJS web server
+   * express is just a package of node
+3. How I do node
+
+
+1. HTTP
+
+* cloud is not just actually software but rather have a
+  cloud computer
+
+* internet is just a connection of computers to one
+  another
+
+* packets are the data that is sent from one computer
+  to another
+
+* client sends data to server, server sends data to
+  client
+
+* node is involve in the server and express is involve
+  in the networking process
+
+* packet has 5 layers (bottom to top):
+  ~ Physical
+    o cables, the actual cables that links computers
+  ~ Link
+    o wifi, ethernet connection
+  ~ Network / internet
+    o IP
+  ~ Transport
+    o UDP / TCP    
+  * combination of Network and Transport Layer is called
+    the internet protocol suite (TCP / IP)
+  ~ Application
+    o HTTP, FTP, SSH, SMTP
+
+* Transport layer creates 2 to the 16 number of ports
+  (~ 65000)
+
+* HTTP request will originate from port 49742 wants to
+  talk to port 80 on another computer, that request will
+  get handed off to the transport layer
+  * it will get wrapped up in what's called a segment
+  * segment will have metadata:
+    o destination port: 80
+    o source port: 49742
+
+* transport layer then passes it to the network layer for
+  further processing
+  * when it gets to the receiving machine, it will go
+    through the process in reverse and eventually find
+    the right port
+
+* two different types of transport layer protocols:
+  ~ UDP (User Datagram Protocol)
+    o Lightweight
+      * 8 bytes for a header
+    o Connectionless
+      * you can just send data without waiting for
+        connection to establish
+    o Consistency
+      * send data no matter what
+      * not care of packet loss
+      * packets out of order
+    o It is Fast
+    o video games (Dota 2), real time communication, etc.
+
+  ~ TCP (Transmission Control Protocol)
+    o Connection-Based
+      * three way handshake
+        - hey I want to talk
+        - sure!
+        - send data
+    o Reliable
+      * delivery acknowledgement
+        - data is acknowledged / received
+      * retransmission
+        - if data is not received, server sends client
+          that it is not delivered so you can submit again
+      * in-order packet
+    o Congestion Control
+      * provides latency to prevent packet loss
+    * HTTP uses TCP because its reliable
+
+* TCP / IP makes 2 computers talk to one another
+
+
+HTTP
+- hypertext transfer protocol
+- in application layer
+- used before basically for hypertext transfer
+- info.cern.ch very first website
+- it does not just pass html anymore:
+  * images
+  * 4k videos
+  * MP4
+- it is based on transport layer
+- as a protocol is efficient
+- http is only connected when required
+- stateless
+  * no dialogue
+  * connected computers only know each other during the
+    connection, after the connection they forget each
+    other
+
+
+* computer connect to ISP (Internet Server provider) then
+  through TCP / IP send request for connection to server
+* server says yes, sends to ISP, ISP sends to computer
+* computer sends data to server through ISP and TCP / IP,
+  part of it is the HTTP request
+* request hits on the server, HTTP connection is cut,
+  TCP connection still connected
+* response from server will be sent to computer, response
+  gets cut after hit, TCP connection will be gone,
+  computer and server will forget each other
+
+* HTTP message has 3 pieces:
+  ~ Start line
+    o single line
+    o describes type of request
+    * Request: get /blog http/1.1
+      * http/1.1 is version of http
+    * Response: http/1.1 404 or 500 or 200
+    
+  ~ header
+    o specifies the request or describes body
+    * contains meta data that is in key, value
+      > one type is MIME type
+        * content-type:text/html
+
+  * there is a blank line between header and body to
+    separate the body from the rest
+
+  ~ body
+    o actual stuff
+    o content
+    * html, binary data, etc.
+
+* you can use curl to check the entire html message
+  ~ curl -v www.google.com
