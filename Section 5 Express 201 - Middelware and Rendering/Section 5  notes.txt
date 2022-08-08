@@ -1,0 +1,436 @@
+Middleware
+- at the very heart of Express
+- can be heard from programming, web development
+
+- create new folder express201 in videocode folder
+- create appUser.js
+- npm init
+- npm install express --save
+
+*
+// Express = 2 things:
+// 1. Router
+// 2. Middleware that comprises a web framework
+
+// Req ----MIDDLEWARE---> Res
+// Middleware function is ANY function that has access to
+// the req, res, next object.
+
+// Req ----MIDDLEWARE---> Res
+// 1. Request comes in.
+// 2. We need to validate the user, sometimes.
+// 3. We need to store some things in the DB.
+// 4. If there is data from the user we need to parse it
+//    and store it
+// 5. Res
+
+// * 2 - 4 are middleware functions
+
+*
+function validateUser(req, res, next) {
+  // get info out of the req object
+  // do some stuff with the DB
+  // res.locals (pre-build with express)
+  res.locals.validated = true;
+  console.log("VALIDATED RAN!");
+  next();
+}
+* any middleware is just res.locals.validated = true and
+  next() inside of it
+
+app.use(validateUser);
+
+app.get("/", (req, res, next) => {
+  res.send("<h1>Main Page</h1>");
+  console.log(res.locals.validated);
+});
+
+app.listen(3000);
+
+* code above, validateUser can be used on ALL paths,
+  ALL method!
+* console.log(res.locals.validated); shows true
+* use next() if you want the middleware to keep on going
+
+*
+app.use("/admin", validateUser);
+
+* validateUser can only be used to path /admin
+
+*
+// This will run validateUser on ALL paths, all methods!
+app.use(validateUser);
+
+// This will run validateUser on /admin, all methods!
+app.use("/admin", validateUser);
+
+// This will run validateUser on /, only on get methods!
+app.get("/", validateUser);
+
+// And, by the way, it looks like this...
+app.get("/", (req, res, next) => {
+  res.locals.validated = true;
+  console.log("VALIDATED RAN!");
+  next();
+});
+
+* to learn more about express(), go to here:
+  https://expressjs.com/en/4x/api.html
+
+* JSON is any data in a server, even in an Express server
+* we gonna use express.json and express.urlencoded as well
+
+*
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+* use jquery for ajax.html, create ajax.html first in
+  public folder
+
+* console.log(req.headers);
+* 'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+* urlencoded is needed to load that
+
+* console.log(req.body);
+* req.body is only possible because of express.urlencoded
+  and express.json
+
+* 3 middleware functions from express():
+// 1. static
+// 2. json
+// 3. urlencoded
+
+* expressjs.com > advanced topics > security best practices
+  > Use Helmet
+
+Helmet
+* is the most downloaded middleware software
+* sets the HTTP headers right upfront
+* protects you for a whole bunch of well-known
+  vulnerabilities
+* package of multiple smaller middlewares
+
+* npm install helmet --save
+
+
+* response in ajax.html is not the response that we are
+* want it to response
+* in the helmetAndOthers.js we have:
+  res.send("Test");
+* this one is not shown to us with:
+  console.log(response); in ajax.html
+
+* to visualize why that happens, use postman
+* url is localhost:3000/ajax
+  * /ajax and not /ajax.html
+* in headers tab:
+  First row
+  KEY: Content-Type
+  VALUE: application/x.www.form-urlencoded
+* in body tab:
+  * select x-www-form-urlencoded
+  KEY: name
+  VALUE: Rob
+* test is shown in Body tab of response
+* if you look at the Headers tab of response, you will see
+  Content-Type is text/html; charset-utf-8
+* res.send() by default will make its content mime-type:
+  text/html
+* res.json() will correct the content-type
+* if we rerun now what we have done on postman, the
+  content-type of the response is now application/json
+
+
+CHOOSE YOUR WEAPON! res.json or res.render
+* api vs server-side rendering
+
+res.render
+* 2003 - myspace
+* computer ---(req)--> server
+           <--(res)---
+  * can only read HTML, JS, CSS
+
+* what happens inside server (top layer to bottom)
+  ~ Front-end UI
+    o React
+    o Vue
+  ~ Programming Layer
+    o C
+    o C++
+    o Java
+    o Python
+    o Ruby
+    o PHP
+    o etc.
+  ~ DB server
+    o SQL
+    o Mysql
+    o Sql server
+    o Postgress
+    o Oracle
+    o NoSQL
+    o MongoDB
+  ~ Web server
+    o Apache
+    o IIS (Windows)
+    o NGINx
+    o Node.JS
+    o Websphere
+    o etc.
+  ~ OS
+    o Linux
+    o Windows
+    O Unix
+
+* response can only be HTML, JS, CSS
+* scenario that php language is used to connect to MySQL
+  server, and it is served to the web using Apache
+  * PHP + MySQL = HTML + JS + CSS
+
+server-side rendering
+* the server is in charge of producing the HTML, CSS, JS
+  by constantly running through the layers inside of it
+* server gonna process the data to HTML, CSS, JS
+* server is in charge in every page load
+* wikipedia is a good site
+
+
+res.json
+* computer ---(req)--> server
+           <--(res)---
+           ---(AJAX)->
+           <--(JSON)--
+  * can only read HTML, JS, CSS
+  * JSON gonna come in HTML and update the DOM
+* Facebook, Amazon is a good site
+
+
+res.render
+- server-side rendering
+- session variables
+- cookies
+
+res.json
+- API / JSON Needs
+
+
+res.render
+res.render("index")
+* check the files that you created
+* view engine is undefined by default
+
+// 1. Express as we know it happens. This file.
+// 2. We define a view engine.
+// - EJS
+// - Mustache
+// - Handlebars
+// - Jade/Pug
+// 3. Inside one of our resourceLimits, we have a
+//    res.render
+// 4. We pass that res.render 2 things:
+// - the file we want to use.
+// - the data we want to send to that file
+// 5. Express uses the node module for our specified view
+//   engine and parses the file.
+// - that MediaSession, it takes the HTML/JS/CSSS and
+//   combine it with whatever "node" there is in a file
+// 6. The final result of this process is a compiled
+//    product of the things the browser can read
+// - HTML, JS, CSS
+
+// app.set(), takes 2 args:
+// 1. key
+// 2. value
+
+* go to expressjs.com > API reference > Application >
+  app.set()
+  * we gonna use the view engine as the key
+  * ejs is the value
+
+* we need to install ejs first
+  ~ npm install ejs --save
+
+
+1. name of the file
+2. type of the file
+3. location of the file
+
+*
+res.render("index");
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+* for pug, syntax is different, more similar to python, 
+  just includes the opening tag without "<>"
+  ~ <h1> is h1 only
+
+
+If you get "Refused to load the script..." in the next lecture, you need to tell Helmet to not load the contentSecurityPolicy like so:
+
+app.use(helmet({
+    contentSecurityPolicy: false,
+}));
+
+Helmet is great, but it can be a little over zealous at times :)
+
+
+* node + front-end is the template engine / view
+
+template engine
+* marries the node and the front-end
+* we are building the DOM using node.js
+* translator in between express and the DOM using the view
+  engines
+
+EJS
+- https://ejs.co/
+* Tags section shows what you can do in EJS to dynamically
+  create your DOM 
+- ejsPractice.js
+*
+<% for (let i=0; i < 10; i++) { %>
+<li>%= i %></li>
+<% } %>
+
+<% for (let i=0; i < 10; i++) { %> <% if (i % 2 === 0){txt = "even" %>
+<% } else{txt = "odd"} %>
+<li><%= i %> = <%= txt %></li>
+<% } %>
+
+  ~ <% %>
+    o instructor calls this wax on wax off (karate kid)
+    o I want to switch over a JS and switch it off
+  
+  ~ <%= %>
+    o whatever is put between it, will be displayed
+
+  ~ <%- %>
+    o let browser interpret what it is, not just text 
+      (e.g images)
+    
+  ~ <%# %>
+    o basically a comment
+
+
+res.render("index", { msg: "Failure!" });
+// the data, in the 2nd arg, is going to be appended to
+// res.locals
+* you can use the msg key in the index.ejs and it will
+  display the value
+
+* <h1><%= msg %></h1>
+
+*
+<h1><%= locals.msg %></h1>
+
+<h2><%= locals.msg2 %></h2>
+
+<h3><%= locals.validated %></h3>
+
+is equals to
+
+<h1><%= msg %></h1>
+
+<h2><%= msg2 %></h2>
+
+<h3><%= validated %></h3>
+
+
+*
+<%- include('head'); %>
+* this is the way to include parts of the page (.ejs) to a 
+  .ejs file
+
+
+HANDLEBARS view engine
+
+* {{ }}
+  ~ anything between it is the key or the res.locals.<name>
+    and will display its value 
+
+* {{{ }}}
+  ~ will escape what is in between and lets browser to
+    interpret what it is (e.g. img)
+
+* {{!-- each, if --}}
+  ~ comment in handlebars
+
+* {{#each}}
+  ~ for each in handlebars
+  *
+    {{#each countries}}
+        <li>{{this.name}} -- {{this.capital}}</li>
+    {{/each}}
+
+* {{#if}}
+  ~ if in handlebars
+  *
+    {{#each countries}}
+        {{#if this.western}}
+            <li>{{this.name}} -- {{this.capital}}</li>
+        {{/if}}
+    {{/each}}
+
+* {{#unless}}
+  ~ if statement but false is true
+  *
+    {{#unless countries}}
+        {{#if this.western}}
+            <li>{{this.name}} -- {{this.capital}}</li>
+        {{/if}}
+    {{/unless}}
+
+*
+Country name: {{country.name}}
+Country capital: {{country.capital}}
+
+res.render("index", {
+    country: {
+      name: "Russia",
+      capital: "Moscow",
+    },
+    msg: "Failure!",
+    msg2: "Success!",
+    // HTML came from the DB and we want to drop it in the
+    // template
+    html: `<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Tunnel_View%2C_Yosemite_Valley%2C_Yosemite_NP_-_Diliff.jpg/426px-Tunnel_View%2C_Yosemite_Valley%2C_Yosemite_NP_-_Diliff.jpg" /></p>`,
+  });
+
+
+* know more about handlebars on this link:
+  https://handlebarsjs.com/
+
+
+
+JADE/PUG view engine
+* indentation is crucial
+
+*
+script(src="https://ajax.googleapis.com/ajax/libs/cesiumjs/1.78/Build/Cesium/Cesium.js")
+link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css", rel="stylesheet")
+
+* to put a class name on an element
+div.container
+
+* to put an id name on an element
+div#container
+
+* to get the value of the key/res.locals.<name>, use "#{}"
+#{msg}
+
+* to make the browser interpret what it is (e.g. img)m use "!{}"
+!{html}
+
+* to use for each, use each <var> in <array>
+  * = should be in the beginning to access the value
+
+* to use if statement, use if <condition>
+
+*
+  each country in countries 
+    li= country.name + " -- " + country.capital
+    if country.western
+        div.western this country is in the western hemisphere
+
+* to know further about pug go to this link:
+  https://pugjs.org/api/getting-started.html

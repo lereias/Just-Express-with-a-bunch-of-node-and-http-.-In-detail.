@@ -1,0 +1,89 @@
+Express.JS
+- https://expressjs.com/
+- instructor uses v4.16.3
+- ours uses v.4.18.1
+* express is a package in node JS
+* node js is the language
+* google created the VA engine
+* ryan dull took the va from chrome and made it node js
+* node js is based on chrome
+* Express is node
+* fast
+  ~ debatable
+* unopinionated
+  ~ does not show things that you should include unlike 
+    ruby on rails
+* minimalist web framework
+  ~ lightweight
+* web applications
+  ~ robust of features and template engines for rendering 
+    come (handlebars, SJS, Pug, or Jade, etc.)
+* api
+  ~ it is unfair to create api
+  * JSON is the tongue of node.js
+* its gonna take care everything in the node.js server
+  that we created, making life easier
+* routing and middleware web framework
+
+
+- create expressServer.js in express101
+- const express = require("express");
+  ~ do "npm init" in terminal to get a package.json
+  ~ do "npm install express --save" to install express
+    * --save makes express as a depency to package.json
+
+- const app = express();
+  * express() is just simply as:
+    node_modules > express > index.js > lib > express.js > 
+    createApplication()
+
+* you can use the devTools to check the status code and
+  mime-type response by going to the network tab > All 
+
+
+BASIC ROUTING IN EXPRESS
+* check the HTTP request methods in mdn:
+  ~ https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+
+* 
+// app object has a few methods:
+// HTTP verbs! REST verbs!
+// 1. get - READ
+// - DEFAULT for all browsers to get.
+// 2. post
+// - CREATE
+// 3. delete
+// - DELETE
+// 4. put
+// - UPDATE
+// 5. all (express only)
+// - i will accept any method
+
+// Take 2 args:
+// 1. path
+// 2. callback to run if an HTTp request that matches this
+//    verb is made to the path in #1
+
+app.all("/", (req, res) => {});
+
+app.get("/", (req, res) => {});
+app.post("/", (req, res) => {});
+app.delete("/", (req, res) => {});
+app.put("/", (req, res) => {});
+
+* console.log(req); on app.all()  or app.get() will make it
+  get true if you refresh the localhost server
+
+* express works from the top down
+  * multiple instances of get, the first one will only be
+    executed
+
+* express.static
+  * built-in middleware function in Express, it serves
+    static files and is based on serve-static
+  * node_modules > express > lib > express.js >
+    exports.static
+
+app.use(express.static("public"));
+* gets all the files in public folder statically
+* can be used many times with different directories
