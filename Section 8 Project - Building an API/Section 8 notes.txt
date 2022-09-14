@@ -1,0 +1,63 @@
+.filter ES6 prototype method
+* is available for all arrays
+* has a callback that returns only the things that are
+  true
+
+*
+const results = movies.filter((movie) => {
+  return movie.most_popular;
+});
+
+.find ES6 prototype method
+* is available for all arrays
+* has a callback that returns only the things that are
+  true
+
+* 
+const results = movieDetails.find((movie) => {
+  return movie.id === movieId;
+});
+
+* anything you pulled from the url, it is a string even
+  if it is a number
+
+* make the api_key validation be app level so you do not
+  need to include it each and every time in routers
+
+*
+app.use((req, res, next) => {
+  // cut off the rseponse if the api key is bad
+  if (req.query.api_key != 123456789) {
+    // these are not the droids were looking for
+    res.status(401); // Unauthorized = 401, NOT a 200
+    res.json("Invalid API Key");
+  } else {
+    next();
+  }
+});
+
+.sort ES6 prototype method
+* is available for all arrays
+* does a quick sort or merge sort to the array
+
+
+* routes with wildcards (:) should be lower to enable
+  other routes
+
+
+* you can use multiple callbacks
+*
+router.post("/:movieId/rating", require_JSON, (req, res, next) => {
+  const movieId = req.params.movieId;
+  console.log(req.get("content-type"));
+});
+
+.includes ES6 prototype method
+* search if it is included in the string
+*
+const results = movies.filter((movie) => {
+  found =
+    movie.overview.includes(searchTerm) || movie.title.includes(searchTerm);
+  return found;
+});
+res.json(results);

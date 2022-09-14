@@ -1,0 +1,67 @@
+API key: 1fb720b97cc13e580c2c35e1138f90f8
+
+If you want to get your own (or this stops working), sign up here: https://www.themoviedb.org/documentation/api?language=en-US
+
+API Docs: https://developers.themoviedb.org/3/getting-started/introduction
+
+Starter files: https://github.com/ridiculous-inc/justExpress/tree/master/starterFiles/movieAppProj1
+
+API vars:
+
+const apiBaseUrl = 'http://api.themoviedb.org/3';
+const nowPlayingUrl = `${apiBaseUrl}/movie/now_playing?api_key=${apiKey}`;
+const imageBaseUrl = 'http://image.tmdb.org/t/p/w300';
+
+
+- go to videocode folder
+- on terminal, express movieFanSite --view=ejs
+- cd movieFanSite
+- npm i
+- copy and paste the given repo to the project
+  https://github.com/ridiculous-inc/justExpress/tree/master/starterFiles/movieAppProj1
+
+- install axios rather than request
+* npm i node-fetch@2 --save
+* node-fetch v2 is the only thing that you can require()
+
+* to uninstall a node module
+npm uninstall <name of module> --save
+* --save is needed to take it out of the dependencies
+  as well
+
+* to get the data in JSON format:
+
+*
+const response = await fetch(nowPlayingUrl);
+const data = await response.json();
+
+* error handling
+try {
+    const response = await fetch(nowPlayingUrl);
+    const data = await response.json();
+    res.locals.data = data.results;
+} catch (error) {
+    console.log("Error in connecting with the api: ", error);
+}
+
+*
+router.use(async (req, res, next) => {
+  try {
+    const response = await fetch(nowPlayingUrl);
+    const data = await response.json();
+    res.locals.data = data.results;
+  } catch (error) {
+    console.log("Error in connecting with the api: ", error);
+  }
+  next();
+});
+
+
+* to learn more about node-fetch, go to this link:
+  https://www.npmjs.com/package/node-fetch
+
+* get the browser extension JSONView to view JSON files in a better structure
+  https://microsoftedge.microsoft.com/addons/detail/jsonview/kmpfgkgaimakokfhgdahhiaaiidiphco
+
+* encodeURI()
+- this is needed for the search

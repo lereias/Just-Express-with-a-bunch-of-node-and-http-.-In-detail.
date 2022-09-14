@@ -1,0 +1,2 @@
+* go to the mysql npm site and get the pooling connection:
+  https://www.npmjs.com/package/mysqlhttps://www.npmjs.com/package/mysql#pooling-connections

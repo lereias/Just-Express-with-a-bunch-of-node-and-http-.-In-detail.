@@ -1,0 +1,66 @@
+* install node.js
+- https://nodejs.org/en/
+
+* install nodemon
+- npm i nodemon -g
+
+* in your project folder, access the terminal and:
+* cosnt <var> = require("<name of module>");
+
+* express
+- npm i express --save
+
+* helmet
+- npm i helmet --save
+
+* ejs
+- npm i ejs --save
+
+* handlebars
+- npm i hbs --save
+
+* jade
+- npm i jave --save
+
+* pug
+- npm i pug --save
+
+* cookie-parser
+- npm i pug cookie-parer --save
+
+
+* EXPRESS GENERATOR (the best)
+- npm i express-generator -g
+- How To Use:
+-- in terminal, do express <name of appProj>
+--- default view engine is jade
+--- express <name of appProj> --view=ejs
+---- this one will make view engine ejs
+-- cd <name of appProj>
+-- npm install
+--- this will install all dependencies in package.json
+-- nodemon on terminal
+
+* node-fetch
+- npm i node-fetch@2 --save
+
+* jquery
+- npm i jquery --save
+
+* jsdom
+- npm i jsdom --save
+
+* mysql
+- npm i mysql --save
+
+* pm2
+- npm i pm2 -g
+
+* multer
+- npm i multer --save
+
+* moment
+- npm i moment --save
+
+* mime-types
+- npm i mime-types --save

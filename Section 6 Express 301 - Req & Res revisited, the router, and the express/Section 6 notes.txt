@@ -1,0 +1,402 @@
+- create express301 folder in videocode
+- create loginSite.js
+- add the usual
+*
+const express = require("express");
+const app = express();
+
+const path = require("path");
+
+const helmet = require("helmet");
+app.use(helmet());
+
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded());
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+app.get("/", (req, res, next) => {
+    res.send("Sanity Check!");
+});
+
+app.listen(3000);
+
+* install dependencies / modules needed
+* npm i express --save
+* npm i helment --save
+* npm i ejs --save
+
+- run the js file on terminal (bash)
+* nodemon loginSite.js
+
+- put the login_starter_files folder from the downloaded 
+  resources to the project
+
+- create views folder, add login.ejs
+- create public > stylesheets, add login_styles.css,
+  rename to style.css
+
+- add this in loginSite.js:
+
+app.get("/login", (req, res, next) => {
+  res.render("login");
+});
+
+- in login.ejs:
+
+<input type="text" placeholder="username" name="username" />
+<input type="password" placeholder="password" name="password" />
+
+* they will be in the key "username" and "password" because 
+  of name=""
+
+- in ligineSite.js:
+
+res.json(req.body);
+
+* will send this:
+{"username":"lee@dtic.com.ph","password":"1"}
+
+
+* session and cookie is similar but 
+  * cookie is stored in browser
+  * session is stored in server
+
+
+*
+// check the db to see if user credentials are valid
+  // if they are valid...
+  // - save their username in a cookie
+  // - is send them to the welcome page
+
+
+*
+// res.cookie takes 2 args:
+// 1. name of the cookie
+// 2. value to set it to
+res.cookie("username", username);
+
+*
+// res.redirect takes 1 arg:
+// 1. Where to send the browser
+res.redirect("/welcome");
+
+*
+if (password === "x") {
+  // res.cookie takes 2 args:
+  // 1. name of the cookie
+  // 2. value to set it to
+  res.cookie("username", username);
+  // res.redirect takes 1 arg:
+  // 1. Where to send the browser
+  res.redirect("/welcome");
+}
+
+
+*
+// req.cookies object will have a propert for every
+// named cookie that has been set.
+
+*
+app.get("/welcome", (req, res, next) => {
+  // req.cookies object will have a propert for every
+  // named cookie that has been set.
+  res.render("welcome", {
+    username: req.cookies.username,
+  });
+});
+
+* This is needed for cookies:
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
+* npm i cookie-parser --save
+
+
+*
+// res.clearCookie takes 1 arg:
+// 1. Cookie to clear (by name)
+res.clearCookie("username");
+
+*
+app.get("logout", (req, res, next) => {
+  // res.clearCookie takes 1 arg:
+  // 1. Cookie to clear (by name)
+  res.clearCookie("username");
+  res.redirect("/login");
+});
+
+
+* you can see the cookies that exist in devTools (select
+  inspect element) in the Application tab > Storage >
+  cookies
+
+
+- GETTING DATA FROM THE QUERY STRING
+* query string is the string after the "?" in url
+
+- in app.post("/process_login", (req, res, next) =>
+
+if (password === "x") {
+  // res.cookie takes 2 args:
+  // 1. name of the cookie
+  // 2. value to set it to
+  res.cookie("username", username);
+  // res.redirect takes 1 arg:
+  // 1. Where to send the browser
+  res.redirect("/welcome");
+} else {
+  // The "?" is a special character in a URL
+  res.redirect("/login?msg=fail&test=hello");
+}
+
+- app.get("/login", (req, res, next) =>
+
+*
+// the req.object has a query property in Express
+// req.query is an object, with a property of every
+// key in the query string
+// The query string is where you put insecure data
+
+console.log(req.query);
+
+
+- GETTING DATA FROM PARAMS (URL WILDCARDS)
+* req.params() and req.param()
+
+*
+// in a route, anytime something has a : in front it is
+// a wildcard!
+// a wildcard, will match anything in that slot
+
+*
+// the req.params object always exists
+// it will have a property for each wildcard in the
+// route
+
+*
+app.get("/story/:storyId", (req, res, next) => {
+  // the req.params object always exists
+  // it will have a property for each wildcard in the
+  // route
+  res.send(`<h1>Story ${req.params.storyId}</h1>`);
+});
+
+*
+app.get("/story/:storyId/:link", (req, res, next) => {
+  // the req.params object always exists
+  // it will have a property for each wildcard in the
+  // route
+  res.send(`<h1>Story ${req.params.storyId} - ${req.params.link}</h1>`);
+});
+
+* you can do a route after an url wildcard
+app.get("/story/:storyId/link", (req, res, next) => {
+  // the req.params object always exists
+  // it will have a property for each wildcard in the
+  // route
+  res.send(`<h1>Story ${req.params.storyId} - ${req.params.link}</h1>`);
+});
+
+*
+// app.param() - takes 2 args:
+// 1. param to look for in the route
+// 2. the callback to run (with the usuals)
+app.param("id", (req, res, next, id) => {
+  console.log("Params called: ", id);
+  // if id has something to do with stories...
+  // if id has something to do with blog...
+  next();
+});
+
+*
+// app.get('/user/:id', ...)
+// app.get('/user/admin/:id', ...)
+// app.get('/user/profile/:id', ...)
+
+
+- SENDING FILES, AND HEADERS ALREADY SENT!
+
+- get the userStatements folder from downloaded
+  resource in express301 folder
+
+* in postman if you just do res.sendFile(<path to file>)
+  in your route, if you run the GET method for that,
+  it will have a header for the response as img/png
+
+* res.download()
+// app has a download method! Takes 2 args:
+// 1. filename
+// 2. optionally, what you want the filename to download as
+// 3. call back with omes with the error
+res.download(
+    path.join(__dirname, "userStatements/BankStatementChequing.png"),
+    "JimStatement.png",
+    (error) => {
+      // if there is an error in sending the file, headers
+      // may already be sent
+      console.log(error);
+      if (error) {
+        // res.headersSent is a Boolean, true if headers
+        // are already sent
+        if (!res.headersSent) {
+          res.redirect("/download/error");
+        }
+      }
+    }
+  );
+
+* the file will be downloaded
+
+* if error,
+* res.headersSent
+*
+// res.headersSemt is a Boolean, true if headers
+// are already sent
+
+*
+// download is setting the headers!
+// 1. content-disposition in attachment, with a filename
+// of the 2nd arg
+
+* in postman if you just do res.download(<path to file>,
+  <optional name>) in your route, if you run the GET method
+  for that, it will have a header for the response as 
+  img/png and a new header called content-disposition having
+  a value of attachment; filename="JimStatement.png"
+
+
+- THE ROUTER
+* express.Router()
+* make things modularize
+
+- create routerApp.js and theRouter.js
+- do the usual in routerApp.js
+
+* go to these links:
+  https://expressjs.com/en/4x/api.html#express.router
+  https://expressjs.com/en/4x/api.html#router
+
+- in theRouter.js:
+*
+const express = require("express");
+let router = express.Router();
+
+// insted of:
+// app.get(...)
+// we do
+// router.get(...)
+
+router.get("/", (req, res, next) => {
+  res.json({
+    msg: "Router works!",
+  });
+});
+
+//this exports the router to the app
+module.exports = router;
+
+* you can use it in app by:
+*
+const router = require("./theRouter.js");
+app.use("/", router);
+
+* you can use a router per path if you want to
+
+*
+// router.all
+// router.post
+// router.delete
+// router.put...
+
+*
+// router.use works the same that app.use does, but it's
+// specific to THIS router
+// router.use
+
+
+- THE EXPRESS GENERATOR
+* npm install express-generator -g
+
+* in terminal do express myNewExpressSite
+* cd to myNewExpressSite
+* npm install
+* nodemon
+
+* app.js is where you you gonna do the editing most
+
+* express <name of appProj> --view=ejs
+
+* bin folder is the entry point of the server
+
+
+- DONT FEAR THE HTTP HEADERS!!
+
+res.
+- json
+- render
+- send
+- sendFile
+- download
+- redirect
+
+* you are NOT sending a webpage, json, file, etc.
+* you are sending a HTTP message
+- start line
+- headers
+- ----------
+- body
+
+* headers are the most important
+
+*
+laptop ---(req)--> express middleware
+       <--(res)---
+       HTTP message
+
+       Start line
+       Headers
+       Body
+
+
+* types of headers
+* general header
+  ~ date
+
+* to know more about http headers go to this link:
+  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+
+* res.set is how you set headers, res.get is how you get
+  the headers
+
+* do curl -v localhost:3000 on gitbash terminal
+* date is now different from current
+
+* changing the content-type to "text/plain" will not be
+  applied, you need to do a hard refresh
+
+* res.set("Cache-Control", "no-store");
+- not need to hard refresh to run the new change of
+  content-type
+
+*
+// fresh and stale
+// fresh returns true if it's not stale
+console.log(req.fresh);
+console.log(req.stale);
+
+* req.ips
+- about ip
+
+* req.shr
+
+* req.accept(types)
+
+* to know more on the cache-control go to this link:
+  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+* to know more req header functions, go to this link:
+  https://expressjs.com/en/api.html#req
+* to know more res header functions, go to this link:
+  https://expressjs.com/en/api.html#res
